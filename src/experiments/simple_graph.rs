@@ -25,8 +25,29 @@ impl Graph {
         self.vertices.iter().any(|v| v.id == edge.from)
     }
 
-    fn traverse_path_sum_weights(&self, path: Vec<i32>) -> f32 {
-        0.0
+    fn get_edge_weight_from_to(&self, from: i32, to: i32) -> Option<f32> {
+        let candidates: Vec<&Edge> = self.edges.iter().filter(|e| e.from == from && e.to == to).collect();
+        if candidates.len() > 1 {
+            return None;
+        }
+        match candidates.first() {
+            Some(x) => return Some(x.weight),
+            None => None
+        }
+    }
+
+    fn traverse_path_sum_weights(&self, mut path: Vec<i32>) -> f32 {
+        match path.len() {
+            0 => 0.,
+            1 => 0.,
+            _ => {
+                let from = *path.get(0).unwrap();
+                let to = *path.get(1).unwrap();
+                let edge = self.get_edge_weight_from_to(from, to).expect(&format!("There is no edge from {from} to {to}"));
+                path.remove(0);
+                return edge + self.traverse_path_sum_weights(path);
+            }
+        }
     }
 }
 
@@ -71,16 +92,7 @@ mod tests {
 
     #[test]
     fn print_graph() {
-        let vertex_list = vec![Vertex { id: 1 }, Vertex { id: 2 }, Vertex { id: 3 }];
-        let edge_list = vec![Edge { id: 1, from: 1, to: 2, weight: 0.5 },
-                             Edge { id: 2, from: 1, to: 3, weight: 2.0 },
-                             Edge { id: 3, from: 2, to: 2, weight: 1.0 },
-                             Edge { id: 4, from: 2, to: 3, weight: 4.0 },
-                             Edge { id: 5, from: 3, to: 1, weight: 2.0 }];
-        let graph = Graph {
-            vertices: vertex_list,
-            edges: edge_list,
-        };
+        let graph = get_test_graph();
         println!("{:?}", graph);
         println!("First edge is {:?}", graph.edges.get(0));
         println!("Graph is valid: {:?}", graph.is_valid());
@@ -95,5 +107,25 @@ mod tests {
         };
         assert_eq!(graph.has_valid_vertices(), false);
         assert_eq!(graph.has_valid_vertices(), false);
+    }
+
+    #[test]
+    fn test_traversal() {
+        let graph = get_test_graph();
+        let sum = graph.traverse_path_sum_weights(vec![1, 2, 3, 1]);
+        assert_eq!(sum, 6.5);
+    }
+
+    fn get_test_graph() -> Graph {
+        let vertex_list = vec![Vertex { id: 1 }, Vertex { id: 2 }, Vertex { id: 3 }];
+        let edge_list = vec![Edge { id: 1, from: 1, to: 2, weight: 0.5 },
+                             Edge { id: 2, from: 1, to: 3, weight: 2.0 },
+                             Edge { id: 3, from: 2, to: 2, weight: 1.0 },
+                             Edge { id: 4, from: 2, to: 3, weight: 4.0 },
+                             Edge { id: 5, from: 3, to: 1, weight: 2.0 }];
+        return Graph {
+            vertices: vertex_list,
+            edges: edge_list,
+        };
     }
 }
