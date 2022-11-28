@@ -102,8 +102,8 @@ mod tests {
     #[test]
     fn test_invalid_graph() {
         let graph = Graph {
-            vertices: vec![Vertex { id: 1 }, Vertex { id: 1 }],
-            edges: vec![Edge { id: 1, from: 3, to: 1, weight: 2.0 }, Edge { id: 2, from: 1, to: 1, weight: 2.0 }],
+            vertices: vec![Vertex { id: 0 }, Vertex { id: 0 }],
+            edges: vec![Edge { id: 1, from: 3, to: 0, weight: 2.0 }, Edge { id: 2, from: 0, to: 0, weight: 2.0 }],
         };
         assert_eq!(graph.has_valid_vertices(), false);
         assert_eq!(graph.has_valid_vertices(), false);
@@ -112,17 +112,17 @@ mod tests {
     #[test]
     fn test_traversal() {
         let graph = get_test_graph();
-        let sum = graph.traverse_path_sum_weights(vec![1, 2, 3, 1]);
-        assert_eq!(sum, 6.5);
+        let sum = graph.traverse_path_sum_weights(vec![0, 1, 2, 0]);
+        assert_eq!(sum, 7.0);
     }
 
     fn get_test_graph() -> Graph {
-        let vertex_list = vec![Vertex { id: 1 }, Vertex { id: 2 }, Vertex { id: 3 }];
-        let edge_list = vec![Edge { id: 1, from: 1, to: 2, weight: 0.5 },
-                             Edge { id: 2, from: 1, to: 3, weight: 2.0 },
-                             Edge { id: 3, from: 2, to: 2, weight: 1.0 },
-                             Edge { id: 4, from: 2, to: 3, weight: 4.0 },
-                             Edge { id: 5, from: 3, to: 1, weight: 2.0 }];
+        let vertex_list = vec![Vertex { id: 0 }, Vertex { id: 1 }, Vertex { id: 2 }];
+        let edge_list = vec![Edge { id: 1, from: 0, to: 1, weight: 1.0 },
+                             Edge { id: 2, from: 0, to: 2, weight: 2.0 },
+                             Edge { id: 3, from: 1, to: 1, weight: 1.0 },
+                             Edge { id: 4, from: 1, to: 2, weight: 4.0 },
+                             Edge { id: 5, from: 2, to: 0, weight: 2.0 }];
         return Graph {
             vertices: vertex_list,
             edges: edge_list,

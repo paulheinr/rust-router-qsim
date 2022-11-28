@@ -1,2 +1,2 @@
-mod reading_network;
+mod fast_paths;
 mod simple_graph;
