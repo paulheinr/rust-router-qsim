@@ -1,9 +1,7 @@
 #[cfg(test)]
 mod tests {
     use std::sync::mpsc;
-    use std::sync::mpsc::RecvError;
     use std::thread;
-    use std::thread::JoinHandle;
 
     #[test]
     fn test_multiple_senders() {
