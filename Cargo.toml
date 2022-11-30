@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 fast_paths = "0.2.0"
 rust_road_router = { git = "https://github.com/kit-algo/rust_road_router" }
+rust_q_sim = { path = "../rust_q_sim" }
